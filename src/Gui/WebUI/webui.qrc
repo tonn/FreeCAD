@@ -1,0 +1,8 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/webui">
+    <file>webui/index.html</file>
+    <!-- Автоматически добавлять все файлы из dist/ после сборки SPA -->
+    <!-- <file>webui/dist/index.html</file> -->
+    <!-- <file>webui/dist/main.js</file> -->
+</qresource>
+</RCC>

@@ -1393,6 +1393,34 @@ SET(FreeCADGui_CPP_SRCS
     StyleParameters/Parser.cpp
     StyleParameters/ParameterManager.cpp
 )
+
+if(BUILD_WITH_WEBUI)
+    list(APPEND FreeCADGui_CPP_SRCS
+        WebUI/WebDockWidget.cpp
+        WebUI/WebHost.cpp
+    )
+
+    list(APPEND FreeCADGui_SRCS
+        WebUI/WebDockWidget.h
+        WebUI/WebHost.h
+    )
+
+    qt_add_resources(WebUI_QRC_SRCS WebUI/webui.qrc)
+    list(APPEND FreeCADGui_SRCS ${WebUI_QRC_SRCS})
+
+    list(APPEND FreeCADGui_LIBS
+        Qt6::WebEngineWidgets
+        Qt6::WebChannel
+    )
+endif()
+
+# Option to enable embedded Web UI using Qt WebEngine
+option(BUILD_WITH_WEBUI "Enable built-in Web UI (QtWebEngine)" OFF)
+
+if(BUILD_WITH_WEBUI)
+    find_package(Qt6 COMPONENTS WebEngineWidgets WebChannel REQUIRED)
+    add_definitions(-DBUILD_WITH_WEBUI)
+endif()
 SET(FreeCADGui_SRCS
     Application.h
     AutoSaver.h
@@ -1468,6 +1496,7 @@ SET(FreeCADGui_SRCS
     ${View_SRCS}
     ${Workbench_SRCS}
     ${Selection_SRCS}
+    ${WebUI_SRCS}
     ${FreeCADGui_SRCS}
 )
 

@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>FreeCAD WebUI PoC</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 12px; }
+      button { padding: 8px 12px; font-size: 14px; }
+      #log { margin-top: 12px; white-space: pre-wrap; background:#f6f6f6; padding:8px; border-radius:4px; }
+    </style>
+  </head>
+  <body>
+    <h2>FreeCAD WebUI PoC (QtWebEngine + QWebChannel)</h2>
+    <div>
+      <button id="btnCreate">Create box</button>
+      <button id="btnList">Get documents</button>
+    </div>
+    <div id="log">log:</div>
+
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <script>
+      (function(){
+        function append(msg) {
+          document.getElementById('log').textContent += '\n' + msg;
+        }
+
+        new QWebChannel(qt.webChannelTransport, function(channel) {
+          window.backend = channel.objects.backend;
+          append('Connected to backend.');
+
+          backend.objectCreated.connect(function(info){
+            append('objectCreated: ' + JSON.stringify(info));
+          });
+
+          backend.selectionChanged.connect(function(payload){
+            append('selectionChanged: ' + JSON.stringify(payload));
+          });
+
+          document.getElementById('btnCreate').addEventListener('click', function(){
+            const params = { type: 'box', size: { x:10, y:10, z:10 } };
+            // call createObject and log returned variant (asynchronous via return value)
+            const res = backend.createObject(params);
+            append('createObject -> ' + JSON.stringify(res));
+          });
+
+          document.getElementById('btnList').addEventListener('click', function(){
+            const docs = backend.getDocuments();
+            append('documents -> ' + JSON.stringify(docs));
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

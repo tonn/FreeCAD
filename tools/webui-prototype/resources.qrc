@@ -1,0 +1,5 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/webui">
+    <file>webui/index.html</file>
+</qresource>
+</RCC>

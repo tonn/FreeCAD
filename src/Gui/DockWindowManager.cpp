@@ -37,6 +37,9 @@
 #include "DockWindowManager.h"
 #include "MainWindow.h"
 #include "OverlayManager.h"
+#ifdef BUILD_WITH_WEBUI
+#include "WebUI/WebDockWidget.h"
+#endif
 
 
 using namespace Gui;
@@ -227,6 +230,12 @@ void DockWindowManager::setupOverlayManagement()
             }
         }
     });
+
+#ifdef BUILD_WITH_WEBUI
+    // Create embedded Web UI dock (hidden by default)
+    auto *web = new Gui::WebDockWidget();
+    addDockWindow("Web UI", web, Qt::RightDockWidgetArea);
+#endif
 }
 
 /**
